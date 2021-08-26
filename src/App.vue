@@ -1,5 +1,5 @@
 <template>
-  <feeds />
+  <feeds ></feeds>
 </template>
 
 <script>

@@ -11,10 +11,10 @@
       </template>
       <template #content>
         <ul class="stories">
-          <li class="stories-item" v-for="story in stories" :key="story.id">
+          <li class="stories-item" v-for="story in repositories" :key="story.id">
             <story-user-item
-              :avatar="story.avatar"
-              :username="story.username"
+              :avatar="story.owner.avatar_url"
+              :username="story.owner.login"
               @onPress="handlePress(story.id)"
             />
           </li>
@@ -22,34 +22,31 @@
       </template>
     </topline>
   </div>
-<div class="c-columns">
   <ul class="columns">
-    <li class="columns-item" v-for="datauser in datausers" :key="datauser.id">
-      <column :nick="datauser.username" :path="datauser.avatar" :comments="datauser.feeds">
+    <li class="columns-item" v-for="repos in repositories" :key="repos.id">
+      <column :nick="repos.owner.login" :path="repos.owner.avatar_url" comments="">
         <template #description>
           <div class="column__content">
-            <div class="column__title" v-text="datauser.title"></div>
-            <div class="column__description" v-text="datauser.description">
+            <div class="column__title" v-text="repos.name"></div>
+            <div class="column__description" v-text="repos.description">
             </div>
-            <div class="column__starPanel"><starPanel :nstar="datauser.nstar" :nfork="datauser.nfork"></starPanel></div>
+            <div class="column__starpanel"><starPanel :nstar="repos.stargazers_count" :nfork="repos.forks_count"></starPanel></div>
           </div>
         </template>
       </column>
     </li>
   </ul>
-  </div>
-
 </template>
 
 <script>
-import { topline } from '../../components/topline'
-import { storyUserItem } from '../../components/storyUserItem'
-import stories from './data.json'
-import datausers from './datausers.json'
-import logo from '../../components/logo/logo.vue'
-import profileIcons from '../../components/profileIcons/profileIcons.vue'
-import column from '../../components/column/column.vue'
-import starPanel from '../../components/starPanel/starPanel.vue'
+import { topline } from '@/components/topline'
+import { storyUserItem } from '@/components/storyUserItem'
+import logo from '@/components/logo/logo.vue'
+import profileIcons from '@/components/profileIcons/profileIcons.vue'
+import column from '@/components/column/column.vue'
+import starPanel from '@/components/starPanel/starPanel.vue'
+import * as api from '@/api'
+import slide from '@/components/slide/slide.vue'
 export default {
   name: 'feeds',
   components: {
@@ -58,12 +55,31 @@ export default {
     column,
     logo,
     profileIcons,
-    starPanel
+    starPanel,
+    slide
   },
   data () {
     return {
-      stories,
-      datausers
+      repositories: []
+    }
+  },
+  methods: {
+    getReposData (repos) {
+      return {
+        title: repos.name,
+        description: repos.description,
+        username: repos.owner.login,
+        stars: repos.stargazers_count
+      }
+    }
+  },
+  async created () {
+    try {
+      const { data } = await api.trendings.getTrendings()
+      this.repositories = data.items
+      console.log(this.repositories)
+    } catch (error) {
+      console.log(error)
     }
   }
 }
