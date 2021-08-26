@@ -46,7 +46,6 @@ import profileIcons from '@/components/profileIcons/profileIcons.vue'
 import column from '@/components/column/column.vue'
 import starPanel from '@/components/starPanel/starPanel.vue'
 import * as api from '@/api'
-import slide from '@/components/slide/slide.vue'
 export default {
   name: 'feeds',
   components: {
@@ -55,8 +54,7 @@ export default {
     column,
     logo,
     profileIcons,
-    starPanel,
-    slide
+    starPanel
   },
   data () {
     return {
