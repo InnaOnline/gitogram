@@ -10,6 +10,9 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   },
+  ignorePatterns: [
+    '**/src/components/**/*.stories.js'
+  ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
