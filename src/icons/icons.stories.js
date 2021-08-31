@@ -14,5 +14,5 @@ export const defaultView = () => ({
   `
 })
 defaultView.story = {
-  name: "Icon"
+  name: 'Icon'
 }
