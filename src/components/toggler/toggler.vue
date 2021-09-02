@@ -13,7 +13,7 @@ export default {
   components: {
     icon
   },
-  date () {
+  data () {
     return {
       isOpened: false
     }

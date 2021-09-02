@@ -3,7 +3,9 @@
     <topline>
       <template #headline>
         <div class="topline___header">
-          <logo></logo>
+          <div class="topline__logo">
+            <logo color='black'></logo>
+          </div>
           <div class="topline__user-icons">
             <profileIcons></profileIcons>
           </div>
@@ -11,11 +13,11 @@
       </template>
       <template #content>
         <ul class="stories">
-          <li class="stories-item" v-for="story in repositories" :key="story.id">
+          <li class="stories-item" v-for="story in this.trendings" :key="story.id">
             <story-user-item
               :avatar="story.owner.avatar_url"
               :username="story.owner.login"
-              @onPress="handlePress(story.id)"
+              @onPress="$router.push({name: 'stories', params: {initialSlide: story.id}})"
             />
           </li>
         </ul>
@@ -23,7 +25,7 @@
     </topline>
   </div>
   <ul class="columns">
-    <li class="columns-item" v-for="repos in repositories" :key="repos.id">
+    <li class="columns-item" v-for="repos in this.trendings" :key="repos.id">
       <column :nick="repos.owner.login" :path="repos.owner.avatar_url" comments="">
         <template #description>
           <div class="column__content">
@@ -45,7 +47,7 @@ import logo from '@/components/logo/logo.vue'
 import profileIcons from '@/components/profileIcons/profileIcons.vue'
 import column from '@/components/column/column.vue'
 import starPanel from '@/components/starPanel/starPanel.vue'
-import * as api from '@/api'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'feeds',
   components: {
@@ -58,10 +60,17 @@ export default {
   },
   data () {
     return {
-      repositories: []
     }
   },
+  computed: {
+    ...mapState({
+      trendings: state => state.data
+    })
+  },
   methods: {
+    ...mapActions({
+      fetchTrendings: 'fetchTrendings'
+    }),
     getReposData (repos) {
       return {
         title: repos.name,
@@ -73,9 +82,9 @@ export default {
   },
   async created () {
     try {
-      const { data } = await api.trendings.getTrendings()
-      this.repositories = data.items
-      console.log(this.repositories)
+      if (!this.trendings.length) {
+        await this.fetchTrendings()
+      }
     } catch (error) {
       console.log(error)
     }

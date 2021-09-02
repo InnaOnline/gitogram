@@ -10,12 +10,20 @@ export default {
   }
 }
 
-const template = (args) => ({
+export const Default = template.bind({})
+Default.story = {
+  name: 'Inactive progress'
+}
+
+const templateActive = (args) => ({
   components: { xProgress: progress },
   data () {
     return { args }
   },
-  template: '<x-progress @onFinish="args.onFinish" />'
+  template: '<x-progress @onFinish="args.onFinish" active />'
 })
 
-export const Default = template.bind({})
+export const DefaultActive = templateActive.bind({})
+DefaultActive.story = {
+  name: 'Active progress'
+}
