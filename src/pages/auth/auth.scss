@@ -1,6 +1,6 @@
 .c-auth {
     position: absolute;
-    top: 60%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     display: flex;
@@ -28,7 +28,7 @@
     padding: 12px 24px;
     background: #31AE54;
     border-radius: 5px;
-    margin-bottom: 90px;
+    margin-bottom: 60px;
   }
   
   .btn-auth__conent {
@@ -49,5 +49,12 @@
     width: 24px;
     height: 24px;
     color: #FFFFFF;
+  }
+  
+  img {
+    & .auth__img {
+      max-width: 800px;
+      max-height: 400px;
+    }
   }
   
