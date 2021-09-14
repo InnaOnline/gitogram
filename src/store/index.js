@@ -5,11 +5,15 @@ export default createStore({
   state: {
     data: [],
     likedOfMe: [],
-    user: {}
+    user: {},
+    userRepos: []
   },
   mutations: {
     SET_USER: (state, user) => {
       state.user = user
+    },
+    SET_USER_REPOS: (state, userRepos) => {
+      state.userRepos = userRepos
     },
     SET_ISSUES: (state, issues) => {
       state.likedOfMe = state.likedOfMe.map((item) => {
@@ -56,11 +60,25 @@ export default createStore({
         }
         return repo
       })
+    },
+    SET_FOLLOWING_STARRED: (state, payload) => {
+      state.likedOfMe = state.likedOfMe.map((repo) => {
+        if (payload.id === repo.id) {
+          repo.following = {
+            ...repo.following,
+            ...payload.data
+          }
+        }
+        return repo
+      })
     }
   },
   getters: {
     getRepoById: (state) => (id) => {
       return state.data.find(item => item.id === id)
+    },
+    getRepoByIdStarred: (state) => (id) => {
+      return state.likedOfMe.find(item => item.id === id)
     },
     getUnstarredOnly (state) {
       return state.data.filter((trendingsRepo) => {
@@ -80,6 +98,15 @@ export default createStore({
       try {
         const { data } = await api.user.getUser()
         commit('SET_USER', data)
+      } catch (e) {
+        console.log(e)
+        throw e
+      }
+    },
+    async fetchUserRepos ({ state, commit, rootState }) {
+      try {
+        const { data } = await api.user.getUserRepos()
+        commit('SET_USER_REPOS', data)
       } catch (e) {
         console.log(e)
         throw e
@@ -137,7 +164,6 @@ export default createStore({
       })
 
       try {
-        console.log(owner.login, repo)
         api.starred.starRepo({ owner: owner.login, repo })
         commit('SET_FOLLOWING', {
           id,
@@ -175,7 +201,6 @@ export default createStore({
       })
 
       try {
-        console.log('unStar')
         await api.starred.unStarRepo({ owner: owner.login, repo })
         commit('SET_FOLLOWING', {
           id,
@@ -193,6 +218,82 @@ export default createStore({
         })
       } finally {
         commit('SET_FOLLOWING', {
+          id,
+          data: {
+            loading: false
+          }
+        })
+      }
+    },
+    async unStarStarred ({ commit, getters }, id) {
+      const { name: repo, owner } = getters.getRepoByIdStarred(id)
+
+      commit('SET_FOLLOWING_STARRED', {
+        id,
+        data: {
+          status: false,
+          loading: true,
+          error: ''
+        }
+      })
+
+      try {
+        await api.starred.unStarRepo({ owner: owner.login, repo })
+        commit('SET_FOLLOWING_STARRED', {
+          id,
+          data: {
+            status: true
+          }
+        })
+      } catch (error) {
+        commit('SET_FOLLOWING_STARRED', {
+          id,
+          data: {
+            status: false,
+            error: 'Error has happened'
+          }
+        })
+        console.log(error)
+      } finally {
+        commit('SET_FOLLOWING_STARRED', {
+          id,
+          data: {
+            loading: false
+          }
+        })
+      }
+    },
+    async starStarred ({ commit, getters }, id) {
+      const { name: repo, owner } = getters.getRepoByIdStarred(id)
+
+      commit('SET_FOLLOWING_STARRED', {
+        id,
+        data: {
+          status: true,
+          loading: true,
+          error: ''
+        }
+      })
+
+      try {
+        await api.starred.starRepo({ owner: owner.login, repo })
+        commit('SET_FOLLOWING_STARRED', {
+          id,
+          data: {
+            status: false
+          }
+        })
+      } catch (error) {
+        commit('SET_FOLLOWING_STARRED', {
+          id,
+          data: {
+            status: true,
+            error: 'Error has happened'
+          }
+        })
+        console.log(error)
+      } finally {
+        commit('SET_FOLLOWING_STARRED', {
           id,
           data: {
             loading: false

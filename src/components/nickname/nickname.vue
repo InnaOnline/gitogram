@@ -3,7 +3,7 @@
     <div class="nickname__avatar">
       <img :src="source" alt="avatar foto" class="nickname__img">
     </div>
-    <div class="nickname__name">{{name}}</div>
+      <div class="nickname__name">{{name}}</div>
   </div>
 </template>
 
@@ -13,4 +13,5 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped src="./nickname.scss"></style>
+<style lang="scss" scoped src="./nickname.scss">
+</style>

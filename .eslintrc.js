@@ -1,7 +1,8 @@
 module.exports = {
   root: true,
   env: {
-    node: true
+    node: true,
+    'jest/globals': true
   },
   extends: [
     'plugin:vue/vue3-essential',
@@ -10,14 +11,21 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   },
-  ignorePatterns: [
-    '**/src/components/**/*.stories.js'
-  ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'indent': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
   },
   overrides: [
+    {
+      files: [
+        '**/__tests__/*.{j,t}s?(x)',
+        '**/tests/unit/**/*.spec.{j,t}s?(x)'
+      ],
+      env: {
+        jest: true
+      }
+    },
     {
       files: [
         '**/__tests__/*.{j,t}s?(x)',

@@ -16,14 +16,12 @@
   &.green {
     background: #31AE54;
   }
-
   &.green:hover {
     background: #9E9E9E;
   }
   &.gray {
     background: #9E9E9E;;
   }
-
   &.gray:hover {
     background: #9E9E9E;
   }
@@ -43,6 +41,10 @@
   &.loading.hover-text::after {
     font-size: 0;
   }
+  &.small {
+    width: 115px;
+    height: 42px;
+  }
 }
 
 .button__loading {
@@ -50,4 +52,3 @@
   height: 18px;
   color: #FFFFFF;
 }
-    
