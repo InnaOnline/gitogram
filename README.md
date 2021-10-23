@@ -1,3 +1,5 @@
+Выпускной проект Курса "Vue.js Продвинутая веб разработка" от Loftschool. Обучение профессии Frontend-разработчик
+
 # gitogram
 
 ## Project setup
