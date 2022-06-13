@@ -1,5 +1,5 @@
-Проект на Vue.js 
+Проект на Vue.js (Frontend)
 
-# gitogram (Frontend)
+# gitogram
 
 [Demo](https://innaonline.github.io/gitogram)
